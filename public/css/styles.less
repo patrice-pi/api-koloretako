@@ -1,0 +1,37 @@
+// out: styles.css, sourcemap: true, compress: true
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-weight: 300;
+    font-size: 1.4rem;
+}
+
+h1 {
+    font-weight: 700;
+    font-style: italic;
+}
+
+table {
+    tbody {
+        tr {
+            &:nth-child(1){
+                background-color: #ffbc00;
+            }
+            &:nth-child(2){
+                background-color: #bfbfbf;
+            }
+            &:nth-child(3){
+                background-color: #c3883f;
+            }
+
+            td {
+                &:nth-child(2){
+                    text-transform: capitalize;
+                }
+            }
+        }
+    }
+}

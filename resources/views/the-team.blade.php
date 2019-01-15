@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Koloretako</title>
+    <title>Laravel</title>
 
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
 
@@ -39,36 +39,37 @@
         </div>
     </nav>
 
-    <h1 class="text-center text-uppercase my-5">Tableau des scores</h1>
+    <h1 class="text-center text-uppercase my-5">L'équipe</h1>
 
-    <div class="container">
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col" width="100px">Classement</th>
-                        <th scope="col">Pseudo</th>
-                        <th scope="col">Niveau atteint</th>
-                        <th scope="col">Durée</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($leaderboards as $key => $value)
-                        <tr>
-                            <th scope="row">
-                                @if ($key+1 == 1 || $key+1 ==  2 || $key+1 == 3)
-                                    <i class="fas fa-trophy fa-3x my-2"><span class="podium">{{ $key+1 }}</span></i>
-                                @else
-                                    <span>{{ $key+1 }}</span>
-                                @endif
-                            </th>
-                            <td>{{ $value->pseudo }}</td>
-                            <td>{{ $value->score }}</td>
-                            <td>{{ $value->duration }}s</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+    <div class="" id="team">
+        <div class="container">
+            <div class="d-flex flex-row flex-wrap align-items-center justify-content-center">
+                <div class="col-12 col-md-6 col-lg-4 mb-4 order-2 order-lg-1">
+                    <img src="/images/user-red.png" class="img-fluid mx-auto d-block" width="230px" alt="" />
+                    <h3>Quentin</h3>
+                    <h4>Développeur</h4>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-4 order-1 order-lg-2">
+                    <img src="/images/user-black.png" class="img-fluid mx-auto d-block" width="230px" alt="" />
+                    <h3>Patrice</h3>
+                    <h4>Directeur Technique</h4>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-4 order-3">
+                    <img src="/images/user-blue.png" class="img-fluid mx-auto d-block" width="230px" alt="" />
+                    <h3>Mohamed</h3>
+                    <h4>Développeur</h4>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-4 order-4">
+                    <img src="/images/user-yellow.png" class="img-fluid mx-auto d-block" width="230px" alt="" />
+                    <h3>Simon</h3>
+                    <h4>Développeur</h4>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-4 order-5">
+                    <img src="/images/user-green.png" class="img-fluid mx-auto d-block" width="230px" alt="" />
+                    <h3>Pierre-Edouard</h3>
+                    <h4>Développeur</h4>
+                </div>
+            </div>
         </div>
     </div>
 

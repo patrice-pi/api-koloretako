@@ -6,7 +6,8 @@ html, body {
 
 body {
     font-weight: 300;
-    font-size: 1.4rem;
+    font-size: 1rem;
+    letter-spacing: 0.035rem;
 }
 
 h1 {
@@ -14,17 +15,57 @@ h1 {
     font-style: italic;
 }
 
+.navbar {
+    .navbar-brand {
+        font-weight: 700;
+    }
+}
+
 table {
+    td, th {
+        vertical-align: middle !important;
+        text-align: center;
+    }
+
     tbody {
+        text-align: center;
         tr {
             &:nth-child(1){
                 background-color: #ffbc00;
+
+                .podium {
+                    color: #ffbc00;
+                }
             }
             &:nth-child(2){
                 background-color: #bfbfbf;
+
+                .podium {
+                    color: #bfbfbf;
+                }
             }
             &:nth-child(3){
                 background-color: #c3883f;
+
+                .podium {
+                    color: #c3883f;
+                }
+            }
+
+            th {
+                i {
+                    position: relative;
+
+                    .podium {
+                        position: absolute;
+                        color: #FFF;
+                        font-family: cursive;
+                        left: 50%;
+                        top: 25%;
+                        transform: translate(-50%, -50%);
+                        font-size: 26px;
+                    }
+                }
             }
 
             td {
@@ -32,6 +73,28 @@ table {
                     text-transform: capitalize;
                 }
             }
+
+            td, th {
+                padding: .15rem !important;
+            }
         }
+    }
+}
+
+
+#team {
+    h3 {
+        text-align: center;
+        font-weight: 200;
+        margin: 1rem 0;
+    }
+
+    h4 {
+        text-align: center;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        padding: 5px 0;
+        border-top: 1px solid #000;
+        border-bottom: 1px solid #000;
     }
 }

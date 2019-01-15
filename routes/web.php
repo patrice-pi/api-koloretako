@@ -18,3 +18,11 @@ Route::get('/', function () {
 
     return view('welcome', ['leaderboards' => $leaderboards]);
 });
+
+Route::get('/the-team', function () {
+    return view('the-team');
+});
+
+Route::get('/game', function () {
+    return view('game');
+});

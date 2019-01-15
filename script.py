@@ -9,18 +9,44 @@ start = time.time()
 
 def launchGame(level = 1):
 	print('Niveau ' + str(level))
-	life = 10
-	getRandomColorsTab(level, life)
+	life = 2
+	gameLvl = input("Choisissez un niveau de difficulté ( 1 - Facile / 2 - Intermédiaire / 3 - Difficile / 4 - Légende ):\r\n")
 
-def checkInputColor(colorTab, level, life):
+	if(gameLvl == "1") :
+		print("Vous avez choisi le niveau de difficulté : Facile\r\n")
+	elif(gameLvl == "2") :
+		print("Vous avez choisi le niveau de difficulté : Intermédiaire\r\n")
+	elif(gameLvl == "3") :
+		print("Vous avez choisi le niveau de difficulté : Difficile\r\n")
+	elif(gameLvl == "4") :
+		print("Vous avez choisi le niveau de difficulté : Légende\r\n")
+
+	time.sleep(1)
+	getRandomColorsTab(level, life, gameLvl)
+
+
+def getRandomColorsTab(level, life, gameLvl, numberElement = 4):
+	colorTab = []
+	arrayColor = ['rouge', 'vert', 'bleu', 'jaune']
+	print("Niveau " + str(level))
+	print(numberElement)
+	print("Mémorisez la combinaison suivante :");
+
+	for i in range(0, numberElement):
+		colorTab.append(random.choice(arrayColor))
+
+	print(colorTab)
+
+	checkInputColor(colorTab, level, life, gameLvl, numberElement)
+
+def checkInputColor(colorTab, level, life, gameLvl, numberElement):
 	nbElementColorTab = len(colorTab)
 	j = 0
 	while nbElementColorTab != 0 :
 		colorInput = input("Entrez la bonne combinaison de couleurs :\r\n")
-		
+
 		if(colorTab[j] == colorInput):
 			print('true')
-			print('Success SON')
 			nbElementColorTab = nbElementColorTab - 1
 			j = j + 1
 		else:
@@ -32,38 +58,33 @@ def checkInputColor(colorTab, level, life):
 				durationGame = str(round(end - start, 2));
 				print('La partie a duré ' + durationGame + 's')
 				pseudo = input("Entrez votre pseudo :\r\n")
-				r = requests.post('http://www.koloretako.loc/api/leaderboards', data = {'pseudo':pseudo, 'score':level, 'duration':durationGame})
+				r = requests.post('http://192.168.1.56/api/leaderboards', data = {'pseudo':pseudo, 'score':level, 'duration':durationGame})
 				break
 			else:
 				print('recommencer')
-				print('Erreur SON')
 				print("Vie(s) restantes : " + str(life))
 			j = 0
 
+
 	if(life != 0):
 		nextLevel = level + 1
-		print("\r\nwin, on passe au niveau " + str(nextLevel))
-		getRandomColorsTab(nextLevel, life)
 
-def getRandomColorsTab(level, life):
-	colorTab = []
-	arrayColor = ['rouge', 'vert', 'bleu', 'jaune']
-	i = 0
-	while i < (3 + level) :
-		colorTab.append(random.choice(arrayColor))
-		time.sleep(0.4)
-		if(colorTab[i] == "rouge"):
-			print("rouge")
-		elif(colorTab[i] == "vert"):
-			print("vert")
-		elif(colorTab[i] == "bleu"):
-			print("bleu")
-		elif(colorTab[i] == "jaune"):
-			print("jaune")
-		i = i+1
+		if(gameLvl == "1") :
+			if(nextLevel % 10 == 0):
+				numberElement = numberElement + 1
+			else :
+				numberElement = numberElement
+		elif(gameLvl == "2") :
+			if(nextLevel % 5 == 0):
+				numberElement = numberElement + 1
+			else :
+				numberElement = numberElement
+		elif(gameLvl == "3") :
+			numberElement = 3 + nextLevel
+		elif(gameLvl == "4") :
+			numberElement = 3 + nextLevel
 
-	print(colorTab)
-
-	checkInputColor(colorTab, level, life)
+		print("\r\n * * * BRAVO ! Tu passe au niveau " + str(nextLevel) + " * * * \r\n")
+		getRandomColorsTab(nextLevel, life, gameLvl, numberElement)
 
 launchGame()

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Koloretako</title>
+    <title>Laravel</title>
 
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
 
@@ -39,37 +39,10 @@
         </div>
     </nav>
 
-    <h1 class="text-center text-uppercase my-5">Tableau des scores</h1>
+    <h1 class="text-center text-uppercase my-5">Le jeu</h1>
 
-    <div class="container">
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col" width="100px">Classement</th>
-                        <th scope="col">Pseudo</th>
-                        <th scope="col">Niveau atteint</th>
-                        <th scope="col">Durée</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($leaderboards as $key => $value)
-                        <tr>
-                            <th scope="row">
-                                @if ($key+1 == 1 || $key+1 ==  2 || $key+1 == 3)
-                                    <i class="fas fa-trophy fa-3x my-2"><span class="podium">{{ $key+1 }}</span></i>
-                                @else
-                                    <span>{{ $key+1 }}</span>
-                                @endif
-                            </th>
-                            <td>{{ $value->pseudo }}</td>
-                            <td>{{ $value->score }}</td>
-                            <td>{{ $value->duration }}s</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+    <div class="" id="game">
+
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

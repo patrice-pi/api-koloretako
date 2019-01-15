@@ -207,6 +207,8 @@ tempo = [
 
 
 def setup():
+    print('Number of arguments:', len(sys.argv), 'arguments.')
+    print('Argument List:', str(sys.argv))
     global p_R, p_G, p_B, p, gameStart, gameEnd
     print('Program is starting ... ')
     GPIO.setmode(GPIO.BOARD)       # Numbers GPIOs by physical location
@@ -382,10 +384,11 @@ def buzz(frequency, length):  # create the function "buzz" and feed it the pitch
         time.sleep(delayValue)  # wait with pin 27 low
 
 
-def getColorsSequence(level, life):
+def getColorsSequence(difficultyMode, level, life, life_message, speed, timeColor = 0.5, numberElement = 4 ):
+    print(timeColor)
     colorSequence = []
     arrayColor = ['rouge', 'vert', 'bleu', 'jaune']
-    for i in range(0, level + 3):
+    for i in range(0, numberElement):
         # colorSequence.append(random.randint(1, 4))
         colorSequence.append(random.choice(arrayColor))
 
@@ -402,15 +405,16 @@ def getColorsSequence(level, life):
         elif seq == 'jaune':
             yelloxBip()
 
-        time.sleep(0.3)
+        # time.sleep(0.3)
+        time.sleep(timeColor)
         stopAlertor()
         setColor('')
         time.sleep(0.2)
 
-    checkInputColor(colorSequence, level, life)
+    checkInputColor(difficultyMode, colorSequence, level, life, life_message, speed, timeColor, numberElement)
 
 
-def checkInputColor(colorTab, level, life):
+def checkInputColor(difficultyMode, colorTab, level, life, life_message, speed, timeColor, numberElement):
     print("colorTab", colorTab)
     nbElementColorTab = len(colorTab)
     j = 0
@@ -445,6 +449,9 @@ def checkInputColor(colorTab, level, life):
                 stopAlertor()
                 nbElementColorTab = len(colorTab)
                 life = life - 1
+                # life_message.remove(str('\334'))
+                life_message.remove(str('\377'))
+                message_life(life_message, level, speed)
                 print('recommencer')
                 print("Vie(s) restantes : " + str(life))
                 time.sleep(1)
@@ -467,6 +474,27 @@ def checkInputColor(colorTab, level, life):
         stopAlertor()
         nextLevel = level + 1
 
+        if (difficultyMode == "1"):
+            if (nextLevel % 10 == 0):
+                numberElement = numberElement + 1
+                timeColor = 0.5
+            else:
+                numberElement = numberElement
+        elif (difficultyMode == "2"):
+            if (nextLevel % 5 == 0):
+                timeColor = 0.5
+                numberElement = numberElement + 1
+            else:
+                numberElement = numberElement
+                timeColor = timeColor - 0.1
+        elif (difficultyMode == "3"):
+            numberElement = 3 + nextLevel
+            timeColor = 0.3
+        elif (difficultyMode == "4"):
+            numberElement = 3 + nextLevel
+            timeColor = 0.2
+
+
         lcd.clear()
         lcd.setCursor(0, 0)
         lcd.message(" YOU WIN ")
@@ -477,53 +505,196 @@ def checkInputColor(colorTab, level, life):
         time.sleep(2)
         lcd.clear()
         lcd.setCursor(0, 0)
-        lcd.message(" TO START PUSH")
+        lcd.message("TO START : PUSH")
         lcd.setCursor(0, 1)
         lcd.message(" YELLOW BUTTON")
 
-        while GPIO.input(buttonPinJaune) != GPIO.LOW:
-            sleep(0.0001)
-        getColorsSequence(nextLevel, life)
+        if difficultyMode != '4':
+            while GPIO.input(buttonPinJaune) != GPIO.LOW:
+                sleep(0.0001)
+        message_life(life_message, nextLevel, speed)
+        getColorsSequence(difficultyMode, nextLevel, life, life_message, speed, timeColor, numberElement)
 
 
-def launchGame(level=1):
+def launchGame(level=1, speed=1):
     life = 10
+    difficultyMode = 0
+
     # mario()
     # heart = [0x0, 0xa, 0x1f, 0x1f, 0xe, 0x4, 0x0]
     # lcd.create_char(0, heart)
     mcp.output(3, 1)  # turn on LCD backlight
     lcd.begin(16, 2)  # set number of LCD lines and columns
-    lcd.setCursor(0, 0)
-    lcd.message("*** KOLORETAKO ***\n")
-    lcd.message(" WELCOME TO OUR GAME")
-    sleep(1)
+    while difficultyMode == 0:
+        if GPIO.input(buttonPinBleu) == GPIO.LOW:
+            difficultyMode = '1'
+            break
+        elif GPIO.input(buttonPinVert) == GPIO.LOW:
+            difficultyMode = '2'
+            break
+        elif GPIO.input(buttonPinJaune) == GPIO.LOW:
+            difficultyMode = '3'
+            break
+        elif GPIO.input(buttonPinRouge) == GPIO.LOW:
+            difficultyMode = '4'
+            break
 
-    for i in range(0, 20):
-        lcd.DisplayLeft()
-        sleep(0.25)
-    # lcd.message('\x00')
-    # lcd.heart()
+        lcd.setCursor(0, 0)
+        lcd.message("*** KOLORETAKO ***\n")
+        lcd.message(" WELCOME TO OUR GAME")
+        sleep(1)
+        if GPIO.input(buttonPinBleu) == GPIO.LOW:
+            difficultyMode = '1'
+            break
+        elif GPIO.input(buttonPinVert) == GPIO.LOW:
+            difficultyMode = '2'
+            break
+        elif GPIO.input(buttonPinJaune) == GPIO.LOW:
+            difficultyMode = '3'
+            break
+        elif GPIO.input(buttonPinRouge) == GPIO.LOW:
+            difficultyMode = '4'
+            break
 
-    sleep(1)
-    # lcd.scrollDisplayRight()
-    lcd.clear()
-    lcd.setCursor(0, 0)
-    lcd.message("TO START : PUSH")
-    lcd.setCursor(0, 1)
-    lcd.message(" YELLOW BUTTON")
+        for i in range(0, 20):
+            lcd.DisplayLeft()
+            sleep(0.25)
+        # lcd.message('\x00')
+        # lcd.heart()
 
-    while GPIO.input(buttonPinJaune) != GPIO.LOW:
-        sleep(0.001)
+        if GPIO.input(buttonPinBleu) == GPIO.LOW:
+            difficultyMode = '1'
+            break
+        elif GPIO.input(buttonPinVert) == GPIO.LOW:
+            difficultyMode = '2'
+            break
+        elif GPIO.input(buttonPinJaune) == GPIO.LOW:
+            difficultyMode = '3'
+            break
+        elif GPIO.input(buttonPinRouge) == GPIO.LOW:
+            difficultyMode = '4'
+            break
+        sleep(1)
+        # lcd.scrollDisplayRight()
+        lcd.clear()
+        lcd.setCursor(0, 0)
+        lcd.message(" PLAY EASY MODE ")
+        lcd.setCursor(0, 1)
+        lcd.message("PUSH BLUE BUTTON")
+
+        if GPIO.input(buttonPinBleu) == GPIO.LOW:
+            difficultyMode = '1'
+            break
+        elif GPIO.input(buttonPinVert) == GPIO.LOW:
+            difficultyMode = '2'
+            break
+        elif GPIO.input(buttonPinJaune) == GPIO.LOW:
+            difficultyMode = '3'
+            break
+        elif GPIO.input(buttonPinRouge) == GPIO.LOW:
+            difficultyMode = '4'
+            break
+
+        sleep(1)
+        lcd.clear()
+        lcd.setCursor(0, 0)
+        lcd.message("PLAY NORMAL MODE")
+        lcd.setCursor(0, 1)
+        lcd.message("PUSH GREEN BTN  ")
+
+        if GPIO.input(buttonPinBleu) == GPIO.LOW:
+            difficultyMode = '1'
+            break
+        elif GPIO.input(buttonPinVert) == GPIO.LOW:
+            difficultyMode = '2'
+            break
+        elif GPIO.input(buttonPinJaune) == GPIO.LOW:
+            difficultyMode = '3'
+            break
+        elif GPIO.input(buttonPinRouge) == GPIO.LOW:
+            difficultyMode = '4'
+            break
+        sleep(1)
+        lcd.clear()
+        lcd.setCursor(0, 0)
+        lcd.message(" PLAY HARD MODE ")
+        lcd.setCursor(0, 1)
+        lcd.message("PUSH YELLOW BTN ")
+
+        if GPIO.input(buttonPinBleu) == GPIO.LOW:
+            difficultyMode = '1'
+            break
+        elif GPIO.input(buttonPinVert) == GPIO.LOW:
+            difficultyMode = '2'
+            break
+        elif GPIO.input(buttonPinJaune) == GPIO.LOW:
+            difficultyMode = '3'
+            break
+        elif GPIO.input(buttonPinRouge) == GPIO.LOW:
+            difficultyMode = '4'
+            break
+        sleep(1)
+        lcd.clear()
+        lcd.setCursor(0, 0)
+        lcd.message("YOU'R A LEGEND ?")
+        lcd.setCursor(0, 1)
+        lcd.message("PUSH RED BUTTON ")
+
+        if GPIO.input(buttonPinBleu) == GPIO.LOW:
+            difficultyMode = '1'
+            break
+        elif GPIO.input(buttonPinVert) == GPIO.LOW:
+            difficultyMode = '2'
+            break
+        elif GPIO.input(buttonPinJaune) == GPIO.LOW:
+            difficultyMode = '3'
+            break
+        elif GPIO.input(buttonPinRouge) == GPIO.LOW:
+            difficultyMode = '4'
+            break
+
+    # while difficultyMode == 0:
+    #     sleep(0.001)
+        # if GPIO.input(buttonPinBleu) == GPIO.LOW:
+        #     difficultyMode = '1'
+        # elif GPIO.input(buttonPinVert) == GPIO.LOW:
+        #     difficultyMode = '2'
+        # elif GPIO.input(buttonPinJaune) == GPIO.LOW:
+        #     difficultyMode = '3'
+        # elif GPIO.input(buttonPinRouge) == GPIO.LOW:
+        #     difficultyMode = '4'
+
+    print(difficultyMode)
 
     stopAlertor()
-    lcd.clear()
-    lcd.setCursor(0, 0)
-    lcd.message("** GAME STARTED **")
-    lcd.setCursor(0, 1)
-    lcd.message("LEVEL 1 SPEED 1")
-    print('Niveau ' + str(level))
+    # life_message = [str('\334'), str('\334'), str('\334'), str('\334'), str('\334'), str('\334'), str('\334'),
+    #                 str('\334'), str('\334'), str('\334')]
+    life_message = [str('\377'), str('\377'), str('\377'), str('\377'), str('\377'), str('\377'), str('\377'),
+                    str('\377'), str('\377'), str('\377')]
 
-    getColorsSequence(level, life)
+    message_life(life_message, level, speed)
+
+    if (difficultyMode == "3"):
+        timeColor = 0.3
+    elif (difficultyMode == "4"):
+        timeColor = 0.2
+    else:
+        timeColor = 0.5
+
+    getColorsSequence(difficultyMode, level, life, life_message, speed, timeColor)
+
+
+def message_life(life_message, level, speed):
+    lcd.clear()
+    lcd.setCursor(0, 0)  # set cursor position
+    #  lcd.message("** GAME STARTED **")
+    lcd.message("LIFE ")
+    for i in life_message:
+        lcd.message(i)  # display life
+
+    lcd.setCursor(0, 1)
+    lcd.message("LEVEL " + str(level) + "  SPEED " + str(speed))
+    print('Niveau ' + str(level))
 
 
 def loop():

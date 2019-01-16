@@ -100,7 +100,14 @@ table {
     }
 }
 
-#game {
+#game::before {
+  transition: 3s;
+  transform: scale(0);
+  margin-top: 20%;
+  transform-origin: center;
+}
+
+#game::after {
   width: 250px;
   height: 250px;
   margin-left: auto;

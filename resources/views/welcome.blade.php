@@ -50,6 +50,7 @@
                         <th scope="col">Pseudo</th>
                         <th scope="col">Niveau atteint</th>
                         <th scope="col">Durée</th>
+                        {{-- <th scope="col">Difficulté</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -65,6 +66,14 @@
                             <td>{{ $value->pseudo }}</td>
                             <td>{{ $value->score }}</td>
                             <td>{{ $value->duration }}s</td>
+                            {{-- @if ($value->mode == 1)
+                                {{ $mode = "easy" }}
+                            @elseif ($value->mode == 2)
+                                {{ $mode = "medium" }}
+                            @elseif ($value->mode == 3)
+                                {{ $mode = "hard" }}
+                            @elseif ($value->mode == 4)
+                                {{ $mode = "legend" }} --}}
                         </tr>
                     @endforeach
                 </tbody>

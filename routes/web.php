@@ -14,6 +14,7 @@
 */
 
 Auth::routes();
+Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout')->name('logout');
 
 Route::get('/', function () {
     $leaderboard1 = App\Leaderboard::where('mode','1')->orderBy('score', 'DESC')->orderBy('duration','ASC')->get();

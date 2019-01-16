@@ -35,6 +35,11 @@ Route::post('/leaderboards', function (Request $request) {
 });
 
 
+
+Route::get('/ip_address', function (Request $request) {
+    return response()->json(App\Ipaddress::all());
+});
+
 Route::put('/ip_address', function (Request $request) {
     $ipaddress = App\Ipaddress::find(1);
     $ipaddress->ip_address = $request->ip_address;

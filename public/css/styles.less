@@ -150,22 +150,16 @@ h1 {
     }
 }
 
-#game::before {
-  transition: 3s;
-  transform: scale(0);
-  margin-top: 20%;
-  transform-origin: center;
-}
-
-#game::after {
-  width: 250px;
-  height: 250px;
-  margin-left: auto;
-  margin-right: auto; 
-  border-radius: 50%;
-  box-shadow: 0 15px 40px lightgrey;
-  transition: 3s;
-  transform: scale(1, 1);
-  margin-top: 20%;
-  transform-origin: center;
+#game {
+    width: 250px;
+    height: 250px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+    box-shadow: 0 15px 40px lightgrey;
+    transition: 0.5s;
+    transform: scale(1, 1);
+    opacity: 0;
+    margin-top: 10%;
+    transform-origin: center;
 }

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Leaderboard extends Model
+class IpAddress extends Model
 {
 
     /**
@@ -13,7 +13,7 @@ class Leaderboard extends Model
      * @var array
      */
     protected $fillable = [
-        'pseudo', 'score', 'duration', 'mode',
+        'id_address', 'machine'
     ];
 
     public $timestamps = false;

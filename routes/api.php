@@ -27,8 +27,30 @@ Route::post('/leaderboards', function (Request $request) {
     $leaderboard->pseudo = $request->pseudo;
     $leaderboard->score = $request->score;
     $leaderboard->duration = $request->duration;
+    $leaderboard->mode = $request->mode;
 
     $leaderboard->save();
 
     return response()->json($leaderboard);
+});
+
+
+Route::put('/ip_address', function (Request $request) {
+    $ipaddress = App\Ipaddress::find(1);
+    $ipaddress->ip_address = $request->ip_address;
+    $ipaddress->machine = $request->machine;
+
+    $ipaddress->save();
+
+    return response()->json($ipaddress);
+});
+
+Route::post('/ip_address', function (Request $request) {
+    $ipaddress = new App\Ipaddress();
+    $ipaddress->ip_address = $request->ip_address;
+    $ipaddress->machine = $request->machine;
+
+    $ipaddress->save();
+
+    return response()->json($ipaddress);
 });

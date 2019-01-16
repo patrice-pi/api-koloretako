@@ -12,42 +12,14 @@
 
                 <form class="text-center my-5" method="POST" action="{{ route('update') }}">
                     {{ csrf_field() }}
-                    <div class="form-row">
-                        <div class="form-group col-lg-6">
-                            <label for="firstname" class="control-label">Nom <span>*</span></label>
-                            <input id="firstname" type="text" class="form-control{{ $errors->has('firstname') ? ' has-error' : '' }}" name="firstname" value="{{ $user->firstname }}" required autofocus>
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            <label for="lastname" class="control-label">Prénom <span>*</span></label>
-                            <input id="lastname" type="text" class="form-control{{ $errors->has('lastname') ? ' has-error' : '' }}" name="lastname" value="{{ $user->lastname }}" required autofocus>
-                        </div>
+                    <div class="form-group">
+                        <label for="name" class="control-label">Pseudo <span>*</span></label>
+                        <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' has-error' : '' }}" name="name" value="{{ $user->name }}" required autofocus>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group col-lg-12">
-                            <label for="phone" class="control-label">Téléphone</label>
-                            <input id="phone" type="text" class="form-control{{ $errors->has('phone') ? ' has-error' : '' }}" name="phone" value="{{ $user->phone }}">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-lg-12">
-                            <label for="address" class="control-label">Adresse</label>
-                            <input id="address" type="text" class="form-control{{ $errors->has('address') ? ' has-error' : '' }}" name="address" value="{{ $user->address }}">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-lg-8">
-                            <label for="city" class="control-label">Ville</label>
-                            <input id="city" type="text" class="form-control{{ $errors->has('city') ? ' has-error' : '' }}" name="city" value="{{ $user->city }}">
-                        </div>
-
-                        <div class="form-group col-lg-4">
-                            <label for="zip" class="control-label">Code Postal</label>
-                            <input id="zip" type="text" class="form-control{{ $errors->has('zip') ? ' has-error' : '' }}" name="zip" value="{{ $user->zip }}">
-                        </div>
+                    <div class="form-group">
+                        <label for="email" class="control-label">Adresse Email</label>
+                        <input id="email" type="email" class="form-control" name="email" value="{{ $user->email }}" required autofocus>
                     </div>
 
                     <div class="form-group">

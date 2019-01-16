@@ -29,14 +29,8 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Tableau des scores <span class="sr-only">(current)</span></a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/the-team">L'équipe</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/game">Le jeu</a>
                 </li>
                 <!-- Si le user n'est pas connecté -->
                 @if(Auth::guest())
@@ -48,17 +42,20 @@
                   </li>
                   <!-- Si le user est connecté -->
                 @elseif(Auth::check())
-                  {{-- <li class="nav-item">
-                    <a class="nav-link btn-primary btn-sm btn mx-2" href="{{ route('user') }}">Profil</a>
-                  </li> --}}
+                  <li class="nav-item active">
+                      <a class="nav-link" href="/">Tableau des scores <span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link btn-primary btn-sm btn mx-2 text-white" href="{{ route('user') }}">Profil</a>
+                  </li>
                   <!-- Si le user est un admin -->
                   @if(Auth::user()->admin)
                     <li class="nav-item">
-                      <a class="nav-link btn-primary btn-sm btn mx-2" href="{{ route('admin_home') }}">Administration</a>
+                      <a class="nav-link btn-primary btn-sm btn mx-2 text-white" href="{{ route('admin_home') }}">Administration</a>
                     </li>
                   @endif
                   <li class="nav-item">
-                    <a class="nav-link btn-danger btn-sm btn mx-2" href="{{ route('logout') }}">Se déconnecter</a>
+                    <a class="nav-link btn-danger btn-sm btn mx-2 text-white" href="{{ route('logout') }}">Se déconnecter</a>
                   </li>
                 @endif
             </ul>

@@ -27,11 +27,11 @@
                     </button>
                 </div>
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <a class="btn btn-link" href="{{ route('password.request') }}">
                         Mot de passe oublié ?
                     </a>
-                </div>
+                </div> --}}
             </form>
         </div>
     </div>

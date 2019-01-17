@@ -62,12 +62,7 @@ class UserController extends Controller
                 ->withInput();
         }
 
-        $user->firstname = $request->firstname;
-        $user->lastname = $request->lastname;
-        $user->address = $request->address;
-        $user->city = $request->city;
-        $user->zip = $request->zip;
-        $user->phone = $request->phone;
+        $user->firstname = $request->name;
 
         // If the password exist hash, or ignore.
         if ($request->password) {
@@ -99,12 +94,7 @@ class UserController extends Controller
                 ->withInput();
         }
 
-        $user->firstname = $request->firstname;
-        $user->lastname = $request->lastname;
-        $user->address = $request->address;
-        $user->city = $request->city;
-        $user->zip = $request->zip;
-        $user->phone = $request->phone;
+        $user->firstname = $request->name;
 
         if ($request->admin) {
             $user->admin = true;
@@ -154,12 +144,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'address' => 'string|max:255',
-            'city' => 'string|max:255',
-            'zip' => 'digits:5',
-            'phone' => 'string|max:10',
+            'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'admin' => 'nullable',

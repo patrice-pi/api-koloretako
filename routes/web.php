@@ -20,7 +20,7 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout')->name(
 Route::get('user', 'UserController@getUser')->name('user')->middleware('auth');
 Route::post('update', 'UserController@updateUser')->name('update');
 
-Route::get('/', function () {
+Route::get('/leaderboard', function () {
     $leaderboard1 = App\Leaderboard::where('mode','1')->orderBy('score', 'DESC')->orderBy('duration','ASC')->get();
 
     $leaderboard2 = App\Leaderboard::where('mode','2')->orderBy('score', 'DESC')->orderBy('duration','ASC')->get();
@@ -30,6 +30,10 @@ Route::get('/', function () {
     $leaderboard4 = App\Leaderboard::where('mode','4')->orderBy('score', 'DESC')->orderBy('duration','ASC')->get();
 
     return view('welcome', ['leaderboard_easy' => $leaderboard1, 'leaderboard_medium' => $leaderboard2, 'leaderboard_hard' => $leaderboard3, 'leaderboard_legend' => $leaderboard4]);
+})->middleware('auth');
+
+Route::get('/', function () {
+    return view('home');
 });
 
 Route::get('/the-team', function () {

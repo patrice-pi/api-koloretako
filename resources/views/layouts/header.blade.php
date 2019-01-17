@@ -1,25 +1,3 @@
-
-{{-- <div class="modal fade" id="modalConnect" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        @if(Auth::guest())
-          <a href="{{ route('login') }}" class="btn btn-primary btn-block">Se connecter</a>
-          <a href="{{ route('register') }}" class="btn btn-primary btn-block">S'inscrire</a>
-        @elseif(Auth::check())
-          <a href="{{ route('user') }}" class="btn btn-primary btn-block">Profil</a>
-          @if(Auth::user()->admin)
-            <a href="{{ route('admin_home') }}" class="btn btn-primary btn-block">Administration</a>
-          @endif
-          <a href="{{ route('logout') }}" class="btn btn-primary btn-block">Se déconnecter</a>
-        @endif
-      </div>
-    </div>
-  </div>
-</div>
-@include('includes.flash_messages') --}}
-
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand text-uppercase" href="/">Koloretako</a>
@@ -43,7 +21,7 @@
                   <!-- Si le user est connecté -->
                 @elseif(Auth::check())
                   <li class="nav-item active">
-                      <a class="nav-link" href="/">Tableau des scores <span class="sr-only">(current)</span></a>
+                      <a class="nav-link" href="/leaderboard">Tableau des scores <span class="sr-only">(current)</span></a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link btn-primary btn-sm btn mx-2 text-white" href="{{ route('user') }}">Profil</a>

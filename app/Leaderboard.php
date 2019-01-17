@@ -13,7 +13,7 @@ class Leaderboard extends Model
      * @var array
      */
     protected $fillable = [
-        'pseudo', 'score', 'duration',
+        'pseudo', 'score', 'duration', 'mode',
     ];
 
     public $timestamps = false;

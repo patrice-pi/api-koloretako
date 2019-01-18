@@ -12,6 +12,7 @@ from Adafruit_LCD1602 import Adafruit_CharLCD
 import sys
 import requests
 import RPi.GPIO as GPIO
+from threading import  Thread
 import time
 from time import sleep
 import random
@@ -205,10 +206,439 @@ tempo = [
     12, 12, 12, 12,
 ]
 
+underworld_melody = [
+    # notes['C4'], notes['C5'], notes['A3'], notes['A4'],
+    # notes['AS3'], notes['AS4'], 0,
+    # 0,
+    # notes['C4'], notes['C5'], notes['A3'], notes['A4'],
+    # notes['AS3'], notes['AS4'], 0,
+    # 0,
+    # notes['F3'], notes['F4'], notes['D3'], notes['D4'],
+    # notes['DS3'], notes['DS4'], 0,
+    # 0,
+    # notes['F3'], notes['F4'], notes['D3'], notes['D4'],
+    # notes['DS3'], notes['DS4'], 0,
+    # 0, notes['DS4'], notes['CS4'], notes['D4'],
+    # notes['CS4'], notes['DS4'],
+    # notes['DS4'], notes['GS3'],
+    # notes['G3'], notes['CS4'],
+    notes['C4'], notes['FS4'], notes['F4'], notes['E3'], notes['AS4'], notes['A4'],
+    notes['GS4'], notes['DS4'], notes['B3'],
+    notes['AS3'], notes['A3'], notes['GS3'],
+    notes['AS3'],
+    0, 0, 0
+]
 
+underworld_tempo = [
+    # 12, 12, 12, 12,
+    # 12, 12, 6,
+    # 3,
+    # 12, 12, 12, 12,
+    # 12, 12, 6,
+    # 3,
+    # 12, 12, 12, 12,
+    # 12, 12, 6,
+    # 3,
+    # 12, 12, 12, 12,
+    # 12, 12, 6,
+    # 6, 18, 18, 18,
+    # 6, 6,
+    # 6, 6,
+    # 6, 6,
+    18, 18, 18, 18, 18, 18,
+    10, 10, 10,
+    10, 10, 10,
+    1,
+    3, 3, 3
+]
+
+adventure_time_melody = [
+    notes['D5'],
+    notes['G5'], notes['G5'], notes['G5'], notes['G5'], notes['FS5'],
+    notes['FS5'], notes['E5'], notes['D5'], notes['E5'], notes['D5'], notes['D5'],
+    notes['C5'], notes['B5'], notes['A5'], notes['G4'],
+    0, notes['C5'], notes['B5'], notes['A5'], notes['G4'], 0,
+    notes['G5'], 0, notes['G5'], notes['G5'], 0, notes['G5'],
+    notes['FS5'], 0, notes['E5'], notes['E5'], notes['D5'], notes['D5'],
+    notes['C5'], notes['C5'], notes['C5'], notes['D5'],
+    notes['D5'], notes['A5'], notes['B5'], notes['A5'], notes['G4'],
+    notes['G5']
+]
+adventure_time_tempo = [
+    24,
+    24, 12, 12, 12, 24,
+    12, 24, 24, 24, 12, 24,
+    12, 12, 12, 12,
+    24, 12, 24, 24, 12, 24,
+    24, 24, 24, 12, 24, 12,
+    24, 24, 24, 12, 12, 24,
+    8, 24, 24, 8,
+    8, 24, 12, 24, 24,
+    12
+]
+
+star_wars_melody = [
+    notes['G4'], notes['G4'], notes['G4'],
+    notes['EB4'], 0, notes['BB4'], notes['G4'],
+    notes['EB4'], 0, notes['BB4'], notes['G4'], 0,
+
+    notes['D4'], notes['D4'], notes['D4'],
+    notes['EB4'], 0, notes['BB3'], notes['FS3'],
+    notes['EB3'], 0, notes['BB3'], notes['G3'], 0,
+
+    notes['G4'], 0, notes['G3'], notes['G3'], 0,
+    notes['G4'], 0, notes['FS4'], notes['F4'],
+    notes['E4'], notes['EB4'], notes['E4'], 0,
+    notes['GS3'], notes['CS3'], 0,
+
+    notes['C3'], notes['B3'], notes['BB3'], notes['A3'], notes['BB3'], 0,
+    notes['EB3'], notes['FS3'], notes['EB3'], notes['FS3'],
+    notes['BB3'], 0, notes['G3'], notes['BB3'], notes['D4'], 0,
+
+    notes['G4'], 0, notes['G3'], notes['G3'], 0,
+    notes['G4'], 0, notes['FS4'], notes['F4'],
+    notes['E4'], notes['EB4'], notes['E4'], 0,
+    notes['GS3'], notes['CS3'], 0,
+
+    notes['C3'], notes['B3'], notes['BB3'], notes['A3'], notes['BB3'], 0,
+
+    notes['EB3'], notes['FS3'], notes['EB3'],
+    notes['BB3'], notes['G3'], notes['EB3'], 0, notes['BB3'], notes['G3'],
+]
+
+star_wars_tempo = [
+    2, 2, 2,
+    4, 8, 6, 2,
+    4, 8, 6, 2, 8,
+
+    2, 2, 2,
+    4, 8, 6, 2,
+    4, 8, 6, 2, 8,
+
+    2, 16, 4, 4, 8,
+    2, 8, 4, 6,
+    6, 4, 4, 8,
+    4, 2, 8,
+    4, 4, 6, 4, 2, 8,
+    4, 2, 4, 4,
+    2, 8, 4, 6, 2, 8,
+
+    2, 16, 4, 4, 8,
+    2, 8, 4, 6,
+    6, 4, 4, 8,
+    4, 2, 8,
+    4, 4, 6, 4, 2, 8,
+    4, 2, 2,
+    4, 2, 4, 8, 4, 2,
+]
+
+popcorn_melody = [
+
+    notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'],
+    notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'],
+
+    notes['A4'], notes['B4'], notes['C5'], notes['B4'], notes['C5'], notes['A4'], notes['B4'], notes['A4'], notes['B4'],
+    notes['G4'],
+    notes['A4'], notes['G4'], notes['A4'], notes['F4'], notes['A4'],
+
+    notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'],
+    notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'],
+
+    notes['A4'], notes['B4'], notes['C5'], notes['B4'], notes['C5'], notes['A4'], notes['B4'], notes['A4'], notes['B4'],
+    notes['G4'],
+    notes['A4'], notes['G4'], notes['A4'], notes['B4'], notes['C5'],
+
+    notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'],
+    notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'],
+
+    notes['E5'], notes['FS5'], notes['G5'], notes['FS5'], notes['G5'], notes['E5'], notes['FS5'], notes['E5'],
+    notes['FS5'], notes['D5'],
+    notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['E5'],
+
+    ###
+
+    notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'],
+    notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'],
+
+    notes['E5'], notes['FS5'], notes['G5'], notes['FS5'], notes['G5'], notes['E5'], notes['FS5'], notes['E5'],
+    notes['FS5'], notes['D5'],
+    notes['E5'], notes['D5'], notes['B4'], notes['D5'], notes['E5'],
+]
+popcorn_tempo = [
+    8, 8, 8, 8, 8, 8, 4,
+    8, 8, 8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+    8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 4,
+    8, 8, 8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+    8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 4,
+    8, 8, 8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+    8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 4,
+    8, 8, 8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+    8, 8, 8, 8, 4,
+]
+
+twinkle_twinkle_melody = [
+    notes['C4'], notes['C4'], notes['G4'], notes['G4'], notes['A4'], notes['A4'], notes['G4'],
+    notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'], notes['D4'], notes['C4'],
+
+    notes['G4'], notes['G4'], notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'],
+    notes['G4'], notes['G4'], notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'],
+
+    notes['C4'], notes['C4'], notes['G4'], notes['G4'], notes['A4'], notes['A4'], notes['G4'],
+    notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'], notes['D4'], notes['C4'],
+]
+
+twinkle_twinkle_tempo = [
+    4, 4, 4, 4, 4, 4, 2,
+    4, 4, 4, 4, 4, 4, 2,
+
+    4, 4, 4, 4, 4, 4, 2,
+    4, 4, 4, 4, 4, 4, 2,
+
+    4, 4, 4, 4, 4, 4, 2,
+    4, 4, 4, 4, 4, 4, 2,
+]
+
+crazy_frog_melody = [
+    notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'],
+    notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
+    notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'],
+    notes['A4'], 0,
+
+    notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'],
+    notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
+    notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'],
+    notes['A4'], 0,
+
+    notes['A3'], notes['G3'], notes['E3'], notes['D3'],
+
+    notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'],
+    notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
+    notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'],
+    notes['A4'],
+]
+
+crazy_frog_tempo = [
+    2, 4, 4, 8, 4, 4, 4,
+    2, 4, 4, 8, 4, 4, 4,
+    4, 4, 4, 8, 4, 8, 4, 4,
+    1, 4,
+
+    2, 4, 4, 8, 4, 4, 4,
+    2, 4, 4, 8, 4, 4, 4,
+    4, 4, 4, 8, 4, 8, 4, 4,
+    1, 4,
+
+    8, 4, 4, 4,
+
+    2, 4, 4, 8, 4, 4, 4,
+    2, 4, 4, 8, 4, 4, 4,
+    4, 4, 4, 8, 4, 8, 4, 4,
+    1,
+]
+
+deck_the_halls_melody = [
+    notes['G5'], notes['F5'], notes['E5'], notes['D5'],
+    notes['C5'], notes['D5'], notes['E5'], notes['C5'],
+    notes['D5'], notes['E5'], notes['F5'], notes['D5'], notes['E5'], notes['D5'],
+    notes['C5'], notes['B4'], notes['C5'], 0,
+
+    notes['G5'], notes['F5'], notes['E5'], notes['D5'],
+    notes['C5'], notes['D5'], notes['E5'], notes['C5'],
+    notes['D5'], notes['E5'], notes['F5'], notes['D5'], notes['E5'], notes['D5'],
+    notes['C5'], notes['B4'], notes['C5'], 0,
+
+    notes['D5'], notes['E5'], notes['F5'], notes['D5'],
+    notes['E5'], notes['F5'], notes['G5'], notes['D5'],
+    notes['E5'], notes['F5'], notes['G5'], notes['A5'], notes['B5'], notes['C6'],
+    notes['B5'], notes['A5'], notes['G5'], 0,
+
+    notes['G5'], notes['F5'], notes['E5'], notes['D5'],
+    notes['C5'], notes['D5'], notes['E5'], notes['C5'],
+    notes['D5'], notes['E5'], notes['F5'], notes['D5'], notes['E5'], notes['D5'],
+    notes['C5'], notes['B4'], notes['C5'], 0,
+]
+
+deck_the_halls_tempo = [
+    2, 4, 2, 2,
+    2, 2, 2, 2,
+    4, 4, 4, 4, 2, 4,
+    2, 2, 2, 2,
+
+    2, 4, 2, 2,
+    2, 2, 2, 2,
+    4, 4, 4, 4, 2, 4,
+    2, 2, 2, 2,
+
+    2, 4, 2, 2,
+    2, 4, 2, 2,
+    4, 4, 2, 4, 4, 2,
+    2, 2, 2, 2,
+
+    2, 4, 2, 2,
+    2, 2, 2, 2,
+    4, 4, 4, 4, 2, 4,
+    2, 2, 2, 2,
+]
+
+manaderna_melody = [
+    notes['E4'], notes['E4'], notes['F4'], notes['G4'],
+    notes['G4'], notes['F4'], notes['E4'], notes['D4'],
+    notes['C4'], notes['C4'], notes['D4'], notes['E4'],
+    notes['E4'], 0, notes['D4'], notes['D4'], 0,
+
+    notes['E4'], notes['E4'], notes['F4'], notes['G4'],
+    notes['G4'], notes['F4'], notes['E4'], notes['D4'],
+    notes['C4'], notes['C4'], notes['D4'], notes['E4'],
+    notes['D4'], 0, notes['C4'], notes['C4'], 0,
+
+    notes['D4'], notes['D4'], notes['E4'], notes['C4'],
+    notes['D4'], notes['E4'], notes['F4'], notes['E4'], notes['C4'],
+    notes['D4'], notes['E4'], notes['F4'], notes['E4'], notes['D4'],
+    notes['C4'], notes['D4'], notes['G3'], 0,
+
+    notes['E4'], notes['E4'], notes['F4'], notes['G4'],
+    notes['G4'], notes['F4'], notes['E4'], notes['D4'],
+    notes['C4'], notes['C4'], notes['D4'], notes['E4'],
+    notes['D4'], 0, notes['C4'], notes['C4'],
+]
+
+manaderna_tempo = [
+    2, 2, 2, 2,
+    2, 2, 2, 2,
+    2, 2, 2, 2,
+    2, 4, 4, 2, 4,
+
+    2, 2, 2, 2,
+    2, 2, 2, 2,
+    2, 2, 2, 2,
+    2, 4, 4, 2, 4,
+
+    2, 2, 2, 2,
+    2, 4, 4, 2, 2,
+    2, 4, 4, 2, 2,
+    2, 2, 1, 4,
+
+    2, 2, 2, 2,
+    2, 2, 2, 2,
+    2, 2, 2, 2,
+    2, 4, 4, 2,
+]
+
+bonnagard_melody = [
+    notes['C5'], notes['C5'], notes['C5'], notes['G4'],
+    notes['A4'], notes['A4'], notes['G4'],
+    notes['E5'], notes['E5'], notes['D5'], notes['D5'],
+    notes['C5'], 0, notes['G4'],
+
+    notes['C5'], notes['C5'], notes['C5'], notes['G4'],
+    notes['A4'], notes['A4'], notes['G4'],
+    notes['E5'], notes['E5'], notes['D5'], notes['D5'],
+    notes['C5'], 0, notes['G4'], notes['G4'],
+
+    notes['C5'], notes['C5'], notes['C5'], notes['G4'], notes['G4'],
+    notes['C5'], notes['C5'], notes['G4'],
+    notes['C5'], notes['C5'], notes['C5'], notes['C5'], notes['C5'], notes['C5'],
+    notes['C5'], notes['C5'], notes['C5'], notes['C5'], notes['C5'], notes['C5'], 0,
+
+    notes['C5'], notes['C5'], notes['C5'], notes['G4'],
+    notes['A4'], notes['A4'], notes['G4'],
+    notes['E5'], notes['E5'], notes['D5'], notes['D5'],
+    notes['C5'], 0,
+]
+
+bonnagard_tempo = [
+    2, 2, 2, 2,
+    2, 2, 1,
+    2, 2, 2, 2,
+    1, 2, 2,
+
+    2, 2, 2, 2,
+    2, 2, 1,
+    2, 2, 2, 2,
+    1, 2, 4, 4,
+
+    2, 2, 2, 4, 4,
+    2, 2, 1,
+    4, 4, 2, 4, 4, 2,
+    4, 4, 4, 4, 2, 2, 4,
+
+    2, 2, 2, 2,
+    2, 2, 1,
+    2, 2, 2, 2,
+    1, 1,
+]
+
+final_countdown_melody = [
+    notes['A3'], notes['E5'], notes['D5'], notes['E5'], notes['A4'],
+    notes['F3'], notes['F5'], notes['E5'], notes['F5'], notes['E5'], notes['D5'],
+    notes['D3'], notes['F5'], notes['E5'], notes['F5'], notes['A4'],
+    notes['G3'], 0, notes['D5'], notes['C5'], notes['D5'], notes['C5'], notes['B4'], notes['D5'],
+    notes['C5'], notes['A3'], notes['E5'], notes['D5'], notes['E5'], notes['A4'],
+    notes['F3'], notes['F5'], notes['E5'], notes['F5'], notes['E5'], notes['D5'],
+    notes['D3'], notes['F5'], notes['E5'], notes['F5'], notes['A4'],
+    notes['G3'], 0, notes['D5'], notes['C5'], notes['D5'], notes['C5'], notes['B4'], notes['D5'],
+    notes['C5'], notes['B4'], notes['C5'], notes['D5'], notes['C5'], notes['D5'],
+    notes['E5'], notes['D5'], notes['C5'], notes['B4'], notes['A4'], notes['F5'],
+    notes['E5'], notes['E5'], notes['F5'], notes['E5'], notes['D5'],
+    notes['E5'],
+]
+
+final_countdown_tempo = [
+    1, 16, 16, 4, 4,
+    1, 16, 16, 8, 8, 4,
+    1, 16, 16, 4, 4,
+    2, 4, 16, 16, 8, 8, 8, 8,
+    4, 4, 16, 16, 4, 4,
+    1, 16, 16, 8, 8, 4,
+    1, 16, 16, 4, 4,
+    2, 4, 16, 16, 8, 8, 8, 8,
+    4, 16, 16, 4, 16, 16,
+    8, 8, 8, 8, 4, 4,
+    2, 8, 4, 16, 16,
+    1,
+]
+
+pseudo = 'nOOb'
+
+#################################################################
+# class Hello5Program:
+#     def __init__(self):
+#         self._running = True
+#
+#     def terminate(self):
+#         self._running = False
+#
+#     def run(self):
+#         global cycle
+#         while self._running:
+#             time.sleep(5) #Five second delay
+#             cycle = cycle + 1.0
+#             print "5 Second Thread cycle+1.0 - ", cycle
+
+#################################################################
 def setup():
-    print('Number of arguments:', len(sys.argv), 'arguments.')
-    print('Argument List:', str(sys.argv))
+    # print('Number of arguments:', len(sys.argv), 'arguments.')
+    # print('Argument List:', str(sys.argv))
+
+    if (len(sys.argv)) >= 2:
+        global pseudo
+        pseudo = sys.argv[1]
+        # print('Welcome ', pseudo)
+
     global p_R, p_G, p_B, p, gameStart, gameEnd
     print('Program is starting ... ')
     GPIO.setmode(GPIO.BOARD)       # Numbers GPIOs by physical location
@@ -315,6 +745,7 @@ def errorBip():
     time.sleep(0.02)
     # p.stop
 
+
 def succesBip():
     p.start(50)
     p.ChangeFrequency(1800)
@@ -333,7 +764,7 @@ def levelBip():
 
 def mario():
     p.start(50)
-    print('\n    Playing song 1...')
+    # print('\n    Playing song 1...')
     for i in range(1, len(sound_mario_1)):  # Play song 1
         p.ChangeFrequency(sound_mario_1[i])  # Change the frequency along the song note
         time.sleep(beat_mario_1[i] * 0.1)  # delay a note for beat * 0.5s
@@ -342,16 +773,16 @@ def mario():
 
 def music():
     p.start(50)
-    print('\n    Playing song 1...')
+    # print('\n    Playing song 1...')
     for i in range(1, len(song_1)):  # Play song 1
         p.ChangeFrequency(song_1[i])  # Change the frequency along the song note
         time.sleep(beat_1[i] * 0.5)  # delay a note for beat * 0.5s
     time.sleep(1)  # Wait a second for next song.
 
-    print('\n\n    Playing song 2...')
-    for i in range(1, len(song_2)):  # Play song 1
-        p.ChangeFrequency(song_2[i])  # Change the frequency along the song note
-        time.sleep(beat_2[i] * 0.5)  # delay a note for beat * 0.5s
+    # print('\n\n    Playing song 2...')
+    # for i in range(1, len(song_2)):  # Play song 1
+    #     p.ChangeFrequency(song_2[i])  # Change the frequency along the song note
+    #     time.sleep(beat_2[i] * 0.5)  # delay a note for beat * 0.5s
 
 
 def stopAlertor():
@@ -385,12 +816,17 @@ def buzz(frequency, length):  # create the function "buzz" and feed it the pitch
 
 
 def getColorsSequence(difficultyMode, level, life, life_message, speed, timeColor = 0.5, numberElement = 4 ):
-    print(timeColor)
+    # print(timeColor)
     colorSequence = []
     arrayColor = ['rouge', 'vert', 'bleu', 'jaune']
     for i in range(0, numberElement):
         # colorSequence.append(random.randint(1, 4))
         colorSequence.append(random.choice(arrayColor))
+
+        try:
+            r = requests.post('http://192.168.1.56/game', data={'pseudo': pseudo, 'colors': colorSequence, 'mode': difficultyMode})
+        except:
+            print("error server")
 
     for seq in colorSequence:
 
@@ -415,10 +851,10 @@ def getColorsSequence(difficultyMode, level, life, life_message, speed, timeColo
 
 
 def checkInputColor(difficultyMode, colorTab, level, life, life_message, speed, timeColor, numberElement):
-    print("colorTab", colorTab)
+    # print("colorTab", colorTab)
     nbElementColorTab = len(colorTab)
     j = 0
-    print("Entrez la bonne combinaison de couleurs :\n")
+    # print("Entrez la bonne combinaison de couleurs :\n")
     while nbElementColorTab != 0:
         # colorInput = input("Entrez la bonne combinaison de couleurs :\r\n")
 
@@ -451,20 +887,39 @@ def checkInputColor(difficultyMode, colorTab, level, life, life_message, speed, 
                 life = life - 1
                 # life_message.remove(str('\334'))
                 life_message.remove(str('\377'))
-                message_life(life_message, level, speed)
-                print('recommencer')
-                print("Vie(s) restantes : " + str(life))
+                message_life(life_message, level, difficultyMode)
+                # print('recommencer')
+                # print("Vie(s) restantes : " + str(life))
                 time.sleep(1)
                 setColor('')
                 time.sleep(0.2)
 
                 if life == 0:
-                    print('tu as perdu, tu as atteint le niveau : ' + str(level))
+                    # print('tu as perdu, tu as atteint le niveau : ' + str(level))
                     gameEnd = time.time()
                     durationGame = str(round(gameEnd - gameStart, 2))
-                    print('La partie a duré ' + durationGame + 's')
-                    pseudo = input("Entrez votre pseudo :\r\n")
-                    r = requests.post('http://192.168.1.56/api/leaderboards', data = {'pseudo':pseudo, 'score':level, 'duration':durationGame})
+                    global pseudo
+                    if pseudo == 'nOOb':
+                        # print('La partie a duré ' + durationGame + 's')
+                        pseudo = input("Entrez votre pseudo :\r\n")
+
+                    try:
+                        r = requests.post('http://192.168.1.56/api/leaderboards', data = {'pseudo':pseudo, 'score':level, 'duration':durationGame, 'mode':difficultyMode})
+                    except:
+                        print("error server")
+
+                    lcd.clear()
+                    lcd.setCursor(0, 0)
+                    if len(pseudo) < 8:
+                        lcd.message('YOU LOSE '+pseudo)
+                    elif len(pseudo) >= 8 and len(pseudo) < 16:
+                        lcd.message(pseudo)
+                    else:
+                        lcd.message("TRY AN EASY ONE")
+                    lcd.setCursor(0, 1)
+                    lcd.message('   GAME OVER   ')
+                    play(underworld_melody, underworld_tempo, 1.3, 0.800)
+                    time.sleep(2)
                     break
                 j = 0
 
@@ -497,26 +952,61 @@ def checkInputColor(difficultyMode, colorTab, level, life, life_message, speed, 
 
         lcd.clear()
         lcd.setCursor(0, 0)
-        lcd.message(" YOU WIN ")
+        lcd.message("   WELL DONE   ")
         lcd.setCursor(0, 1)
-        message = "LEVEL "+str(nextLevel)+" SPEED 1"
+        message = "LEVEL "+str(nextLevel)
         lcd.message(message)
-        print("\r\nwin, on passe au niveau " + str(nextLevel))
+        # print("\r\nwin, on passe au niveau " + str(nextLevel))
         time.sleep(2)
-        lcd.clear()
-        lcd.setCursor(0, 0)
-        lcd.message("TO START : PUSH")
-        lcd.setCursor(0, 1)
-        lcd.message(" YELLOW BUTTON")
-
         if difficultyMode != '4':
+            lcd.clear()
+            lcd.setCursor(0, 0)
+            lcd.message("TO START : PUSH")
+            lcd.setCursor(0, 1)
+            lcd.message(" YELLOW BUTTON")
+
             while GPIO.input(buttonPinJaune) != GPIO.LOW:
                 sleep(0.0001)
-        message_life(life_message, nextLevel, speed)
+
+        message_life(life_message, nextLevel, difficultyMode)
         getColorsSequence(difficultyMode, nextLevel, life, life_message, speed, timeColor, numberElement)
 
 
 def launchGame(level=1, speed=1):
+    # print("The Final Countdown")
+    # play(final_countdown_melody, final_countdown_tempo, 0.30, 1.2000)
+    # time.sleep(2)
+    #
+    # print("Manaderna (Symphony No. 9) Melody")
+    # play(manaderna_melody, manaderna_tempo, 0.30, 0.800)
+    # time.sleep(2)
+    #
+    # print("Deck The Halls Melody")
+    # play(deck_the_halls_melody, deck_the_halls_tempo, 0.30, 0.800)
+    # time.sleep(2)
+    # print("Crazy Frog (Axel F) Theme")
+    # play(crazy_frog_melody, crazy_frog_tempo, 0.30, 0.900)
+    # time.sleep(2)
+    # print("Twinkle, Twinkle, Little Star Melody")
+    # play(twinkle_twinkle_melody, twinkle_twinkle_tempo, 0.50, 1.000)
+    # time.sleep(2)
+    # print("Popcorn Melody")
+    # play(popcorn_melody, popcorn_tempo, 0.50, 1.000)
+    # time.sleep(2)
+    # print("Star Wars Theme")
+    # play(star_wars_melody, star_wars_tempo, 0.50, 1.000)
+    # time.sleep(2)
+    # print("Super Mario Theme")
+    # play(melody, tempo, 1.3, 0.800)
+    # time.sleep(2)
+
+    # print("Super Mario Underworld Theme")
+    # play(underworld_melody, underworld_tempo, 1.3, 0.800)
+    # time.sleep(2)
+
+    # print("Adventure Time Theme")
+    # play(adventure_time_melody, adventure_time_tempo, 1.3, 1.500)
+
     life = 10
     difficultyMode = 0
 
@@ -539,10 +1029,18 @@ def launchGame(level=1, speed=1):
             difficultyMode = '4'
             break
 
+        lcd.clear()
         lcd.setCursor(0, 0)
-        lcd.message("*** KOLORETAKO ***\n")
-        lcd.message(" WELCOME TO OUR GAME")
-        sleep(1)
+        lcd.message("** KOLORETAKO **\n")
+        # print('Welcome ', pseudo)
+        if pseudo != 'nOOb'and len(pseudo) <= 7:
+            lcd.message("WELCOME " + pseudo)
+        elif pseudo != 'nOOb' and len(pseudo) > 7 and len(pseudo) < 13:
+            lcd.message("HI " + pseudo)
+        else:
+            lcd.message("WELCOME TO YOU")
+
+        sleep(2)
         if GPIO.input(buttonPinBleu) == GPIO.LOW:
             difficultyMode = '1'
             break
@@ -555,26 +1053,8 @@ def launchGame(level=1, speed=1):
         elif GPIO.input(buttonPinRouge) == GPIO.LOW:
             difficultyMode = '4'
             break
+        sleep(3)
 
-        for i in range(0, 20):
-            lcd.DisplayLeft()
-            sleep(0.25)
-        # lcd.message('\x00')
-        # lcd.heart()
-
-        if GPIO.input(buttonPinBleu) == GPIO.LOW:
-            difficultyMode = '1'
-            break
-        elif GPIO.input(buttonPinVert) == GPIO.LOW:
-            difficultyMode = '2'
-            break
-        elif GPIO.input(buttonPinJaune) == GPIO.LOW:
-            difficultyMode = '3'
-            break
-        elif GPIO.input(buttonPinRouge) == GPIO.LOW:
-            difficultyMode = '4'
-            break
-        sleep(1)
         # lcd.scrollDisplayRight()
         lcd.clear()
         lcd.setCursor(0, 0)
@@ -636,7 +1116,7 @@ def launchGame(level=1, speed=1):
         sleep(1)
         lcd.clear()
         lcd.setCursor(0, 0)
-        lcd.message("YOU'R A LEGEND ?")
+        lcd.message("YOU ARE A LEGEND")
         lcd.setCursor(0, 1)
         lcd.message("PUSH RED BUTTON ")
 
@@ -652,6 +1132,7 @@ def launchGame(level=1, speed=1):
         elif GPIO.input(buttonPinRouge) == GPIO.LOW:
             difficultyMode = '4'
             break
+        sleep(1)
 
     # while difficultyMode == 0:
     #     sleep(0.001)
@@ -664,7 +1145,7 @@ def launchGame(level=1, speed=1):
         # elif GPIO.input(buttonPinRouge) == GPIO.LOW:
         #     difficultyMode = '4'
 
-    print(difficultyMode)
+    # print(difficultyMode)
 
     stopAlertor()
     # life_message = [str('\334'), str('\334'), str('\334'), str('\334'), str('\334'), str('\334'), str('\334'),
@@ -672,7 +1153,7 @@ def launchGame(level=1, speed=1):
     life_message = [str('\377'), str('\377'), str('\377'), str('\377'), str('\377'), str('\377'), str('\377'),
                     str('\377'), str('\377'), str('\377')]
 
-    message_life(life_message, level, speed)
+    message_life(life_message, level, difficultyMode)
 
     if (difficultyMode == "3"):
         timeColor = 0.3
@@ -688,164 +1169,16 @@ def message_life(life_message, level, speed):
     lcd.clear()
     lcd.setCursor(0, 0)  # set cursor position
     #  lcd.message("** GAME STARTED **")
-    lcd.message("LIFE ")
+    lcd.message("LIFE  ")
     for i in life_message:
         lcd.message(i)  # display life
 
     lcd.setCursor(0, 1)
-    lcd.message("LEVEL " + str(level) + "  SPEED " + str(speed))
-    print('Niveau ' + str(level))
-
-
-def loop():
-    mcp.output(3, 1)  # turn on LCD backlight
-    lcd.begin(16, 2)  # set number of LCD lines and columns
-    level = 4
-    lifeMessage = 'OOOOOOOOOO'
-    lifeCount = 10
-
-    lcd.setCursor(0, 0)  # set cursor position
-    lcd.message('\99 KOLORETAKO ♡\n')  # display message
-    # lcd.message('Level' + str(level-4))  # display level
-    lcd.message('\u2661')
-    print('\u2661')
-    sleep(1)
-
-    # print("Super Mario Theme")
-    # play(melody, tempo, 1.3, 0.800)
-    # time.sleep(2)
-
-    while True:
-
-        sequence = []
-        time.sleep(2)
-        lcd.setCursor(0, 0)  # set cursor position
-        lcd.message(lifeMessage)
-        lcd.setCursor(0, 1)  # set cursor position
-        lcd.message('START')
-
-        for i in range(0,level):
-            sequence.append(random.randint(1, 4))
-
-        for seq in sequence:
-            if seq == 'rouge':
-                redBip()
-            elif seq == 'vert':
-                greenBip()
-            elif seq == 'bleu':
-                blueBip()
-            elif seq == 'jaune':
-                yelloxBip()
-            setColor(seq)
-            time.sleep(0.3)
-            stopAlertor()
-            setColor('')
-            time.sleep(0.2)
-
-        lcd.setCursor(0, 1)  # set cursor position
-        lcd.message('YOUR TURN')
-
-        userSequence = []
-        print('sequence jeu ', sequence)
-        while len(userSequence)<level:
-            if GPIO.input(buttonPinJaune) == GPIO.LOW:
-                userSequence.append(4)
-                setColor(4)
-                print('sequence value: ', sequence[len(userSequence) - 1])
-                if sequence[len(userSequence)-1] != 4:
-                    print('error')
-                    errorBip()
-                    time.sleep(0.2)
-                    stopAlertor()
-                    lcd.clear()
-                    lifeMessage = lifeMessage[:len(lifeMessage) - 1]
-                    lcd.setCursor(0, 0)  # set cursor position
-                    lcd.message(lifeMessage)
-                else:
-                    succesBip()
-                    stopAlertor()
-                time.sleep(1)
-                setColor('')
-                time.sleep(0.2)
-            elif GPIO.input(buttonPinRouge) == GPIO.LOW:
-                userSequence.append(1)
-                setColor(1)
-                print('sequence value: ', sequence[len(userSequence) - 1])
-                if sequence[len(userSequence)-1] != 1:
-                    lcd.clear()
-                    lifeMessage = lifeMessage[:len(lifeMessage)-1]
-                    lcd.setCursor(0, 0)  # set cursor position
-                    lcd.message(lifeMessage)
-                    errorBip()
-                    time.sleep(0.2)
-                    stopAlertor()
-                else:
-                    succesBip()
-                    stopAlertor()
-                time.sleep(1)
-                setColor('')
-                time.sleep(0.2)
-            elif GPIO.input(buttonPinVert) == GPIO.LOW:
-                userSequence.append(2)
-                setColor(2)
-                print('sequence value: ', sequence[len(userSequence) - 1])
-                if sequence[len(userSequence)-1] != 2:
-                    print('error')
-                    errorBip()
-                    time.sleep(0.2)
-                    stopAlertor()
-                    lcd.clear()
-                    lifeMessage = lifeMessage[:len(lifeMessage) - 1]
-                    lcd.setCursor(0, 0)  # set cursor position
-                    lcd.message(lifeMessage)
-                else:
-                    succesBip()
-                    stopAlertor()
-                time.sleep(1)
-                setColor('')
-                time.sleep(0.2)
-            elif GPIO.input(buttonPinBleu) == GPIO.LOW:
-                userSequence.append(3)
-                setColor(3)
-                print('sequence value: ', sequence[len(userSequence) - 1])
-                if sequence[len(userSequence)-1] != 3:
-                    print('error')
-                    errorBip()
-                    time.sleep(0.2)
-                    stopAlertor()
-                    lcd.clear()
-                    lifeMessage = lifeMessage[:len(lifeMessage) - 1]
-                    lcd.setCursor(0, 0)  # set cursor position
-                    lcd.message(lifeMessage)
-                else:
-                    succesBip()
-                    stopAlertor()
-                time.sleep(1)
-                setColor('')
-                time.sleep(0.2)
-
-        print('sequence jeu ', sequence)
-        print('sequence utilisateur ', userSequence)
-
-        temp = [i for i, j in zip(sequence, userSequence) if i == j]
-
-        if len(temp) != level:
-            print("Game Over")
-            lcd.setCursor(0, 1)  # set cursor position
-            lcd.message('GAME OVER ')
-            sleep(3)
-            break
-        else:
-            levelBip()
-            time.sleep(0.2)
-            stopAlertor()
-            level += 1
-            lcd.setCursor(0, 1)  # set cursor position
-            lcd.message('Level ' + str(level - 4))
-            sleep(1)
-
-    destroy()
-
+    if level < 10:
+        lcd.message("LEVEL 0" + str(level) + "  MODE " + str(speed))
+    else:
+        lcd.message("LEVEL " + str(level) + "  MODE " + str(speed))
+    # print('Niveau ' + str(level))
 
 def destroy():
     GPIO.output(buzzerPin, GPIO.LOW)  # buzzer off
@@ -877,7 +1210,6 @@ lcd = Adafruit_CharLCD(pin_rs=0, pin_e=2, pins_db=[4, 5, 6, 7], GPIO=mcp)
 if __name__ == '__main__':     # Program start from here
     setup()
     try:
-        # loop()
         gameStart = time.time()
         launchGame()
         destroy()
@@ -888,3 +1220,5 @@ if __name__ == '__main__':     # Program start from here
     #     destroy()
     except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the child program destroy() will be  executed.
         destroy()
+
+#ADC0607B

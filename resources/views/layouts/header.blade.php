@@ -23,9 +23,9 @@
                   <li class="nav-item active">
                       <a class="nav-link" href="/leaderboard">Tableau des scores <span class="sr-only">(current)</span></a>
                   </li>
-                  <li class="nav-item">
+                  {{-- <li class="nav-item">
                     <a class="nav-link btn-primary btn-sm btn mx-2 text-white" href="{{ route('user') }}">Profil</a>
-                  </li>
+                  </li> --}}
                   <!-- Si le user est un admin -->
                   @if(Auth::user()->admin)
                     <li class="nav-item">

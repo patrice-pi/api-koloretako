@@ -3,6 +3,9 @@
 @section('content')
 
     <h1 class="text-center text-uppercase my-5">Tableau des scores</h1>
+    <?php
+
+    ?>
 
     <div id="leaderboard">
         <div class="container">
@@ -16,7 +19,7 @@
                                     <th scope="col" width="100px">Classement</th>
                                     <th scope="col">Pseudo</th>
                                     <th scope="col">Niveau atteint</th>
-                                    <th scope="col">Durée</th>
+                                    <th scope="col">Durée (H:m:s)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -31,7 +34,7 @@
                                         </th>
                                         <td>{{ $value->pseudo }}</td>
                                         <td>{{ $value->score }}</td>
-                                        <td>{{ $value->duration }}s</td>
+                                        <td>{{ gmdate("H:i:s", $value->duration) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -47,7 +50,7 @@
                                     <th scope="col" width="100px">Classement</th>
                                     <th scope="col">Pseudo</th>
                                     <th scope="col">Niveau atteint</th>
-                                    <th scope="col">Durée</th>
+                                    <th scope="col">Durée (H:m:s)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,7 +65,7 @@
                                         </th>
                                         <td>{{ $value->pseudo }}</td>
                                         <td>{{ $value->score }}</td>
-                                        <td>{{ $value->duration }}s</td>
+                                        <td>{{ gmdate("H:i:s", $value->duration) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -78,7 +81,7 @@
                                     <th scope="col" width="100px">Classement</th>
                                     <th scope="col">Pseudo</th>
                                     <th scope="col">Niveau atteint</th>
-                                    <th scope="col">Durée</th>
+                                    <th scope="col">Durée (H:m:s)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,7 +96,7 @@
                                         </th>
                                         <td>{{ $value->pseudo }}</td>
                                         <td>{{ $value->score }}</td>
-                                        <td>{{ $value->duration }}s</td>
+                                        <td>{{ gmdate("H:i:s", $value->duration) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -109,7 +112,7 @@
                                     <th scope="col" width="100px">Classement</th>
                                     <th scope="col">Pseudo</th>
                                     <th scope="col">Niveau atteint</th>
-                                    <th scope="col">Durée</th>
+                                    <th scope="col">Durée (H:m:s)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -124,7 +127,7 @@
                                         </th>
                                         <td>{{ $value->pseudo }}</td>
                                         <td>{{ $value->score }}</td>
-                                        <td>{{ $value->duration }}s</td>
+                                        <td>{{ gmdate("H:i:s", $value->duration) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
